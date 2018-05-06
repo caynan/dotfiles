@@ -1,33 +1,23 @@
-# holman does dotfiles
+# Dotfiles
 
 Your dotfiles are how you personalize your system. These are mine.
 
-I was a little tired of having long alias files and everything strewn about
-(which is extremely common on other dotfiles projects, too). That led to this
-project being much more topic-centric. I realized I could split a lot of things
-up into the main areas I used (Ruby, git, system libraries, and so on), so I
-structured the project accordingly.
-
-If you're interested in the philosophy behind why projects like these are
-awesome, you might want to [read my post on the
-subject](http://zachholman.com/2010/08/dotfiles-are-meant-to-be-forked/).
-
-## topical
+## Topical
 
 Everything's built around topic areas. If you're adding a new area to your
-forked dotfiles — say, "Java" — you can simply add a `java` directory and put
+forked dotfiles — say, "go" — you can simply add a `go` directory and put
 files in there. Anything with an extension of `.zsh` will get automatically
 included into your shell. Anything with an extension of `.symlink` will get
 symlinked without extension into `$HOME` when you run `script/bootstrap`.
 
-## what's inside
+## What's inside
 
 A lot of stuff. Seriously, a lot of stuff. Check them out in the file browser
 above and see what components may mesh up with you.
-[Fork it](https://github.com/holman/dotfiles/fork), remove what you don't
+[Fork it](https://github.com/caynan/dotfiles/fork), remove what you don't
 use, and build on what you do use.
 
-## components
+## Components
 
 There's a few special files in the hierarchy.
 
@@ -46,7 +36,7 @@ There's a few special files in the hierarchy.
   but still keep those autoloaded files in your home directory. These get
   symlinked in when you run `script/bootstrap`.
 
-## install
+## Install
 
 Run this:
 
@@ -56,7 +46,7 @@ cd ~/.dotfiles
 script/install
 ```
 
-Open the `GPG Keychain` app and restore your GPG keys. (tutorial to setup your 
+Open the `GPG Keychain` app and restore your GPG keys. (tutorial to setup your's 
 coming soon) You will need your GPG Key ID to setup your git signing key on the next step.
 
 Run this:
