@@ -1,0 +1,6 @@
+if [ -z "$1" ]; then
+    echo "Usage: seek-and-destroy <numeric port identifier>" >&2
+    return 1
+fi
+
+lsof -ti :$1 | xargs kill

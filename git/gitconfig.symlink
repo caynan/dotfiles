@@ -1,0 +1,236 @@
+# Local/private config goes in the include
+[include]
+        path = ~/.gitconfig.local
+[gpg]
+        program = /usr/local/MacGPG2/bin/gpg2
+[commit]
+        gpgsign = true
+[hub]
+        protocol = https
+[alias]
+        ##
+        # One letter alias for our most frequent commands.
+        ##
+        a = add
+        b = branch
+        c = commit
+        d = diff
+        f = fetch
+        g = grep
+        l = log
+        m = merge
+        o = checkout
+        p = pull
+        r = remote
+        s = status
+        w = whatchanged
+
+        ##
+        # Short aliases for our frequent commands.
+        ##
+
+        ### add ###
+        
+        # add all
+        aa = add --all
+
+        # add by patch - looks at each change, and asks if we want to put it in the repo.
+        ap = add --patch
+
+        # add just the files that are updated.
+        au = add --update
+
+        ### commit ###
+
+        # commit - amend the tip of the current branch rather than creating a new commit.
+        ca = commit --amend
+
+        # commit - amend the tip of the current branch, and do not edit the message.
+        can = commit --amend --no-edit
+
+        # commit - amend the tip of the current branch, and edit the message.
+        cam = commit --amend --message
+
+        # commit interactive
+        ci = commit --interactive
+
+        # commit with a message
+        cm = commit --message
+
+        ### checkout ###
+
+        # checkout - update the working tree to match a branch or paths. [same as "o" for "out"]
+        co = checkout
+
+        ### diff ###
+
+        # Remove `+` and `-` from start of diff lines; just rely upon color.
+        # dd = !git diff --color | sed "s/^\([^-+ ]*\)[-+ ]/\\1/" | less -r
+
+        # diff - show changes not yet staged
+        dc = diff --cached
+
+        # diff - changes about to be commited
+        ds = diff --staged
+
+        # diff - show changes but by word, not line
+        dw = diff --word-diff
+
+        ### clean ###
+
+        # clean everything to be pristine
+        cleanest = clean -ffdx
+
+        # clean local branches which have already been merged into master
+        # clean-branch = !`git branch --merged master | grep -v "\* master" | xargs -n 1 git branch -D`
+
+        ### grep ###
+
+        # grep with grouping of the output lines
+        gg =  grep --break --heading --line-number
+
+        ### log ###
+
+        # log with a text-based graphical representation of the commit history.
+        lg = log --graph --all --oneline --decorate
+
+        # log with patch generation.
+        lp = log --patch
+
+        # log key - our favorite way to show our key performance indicators, i.e. our most useful summary.
+        lk = log --graph --topo-order --abbrev-commit --date=short --decorate --all --boundary --pretty=format:'%Cgreen%ad %Cred%h%Creset -%C(yellow)%d%Creset %s %Cblue[%cn]%Creset %Cblue%G?%Creset'
+
+        # log latest - show the 10 most recent lines using `lk`
+        ll = log -n 10 --graph --topo-order --abbrev-commit --date=short --decorate --all --boundary --pretty=format:'%Cgreen%ad'
+
+        # Summarize your own changes since yesterday, suitable for a daily standup meeting.
+        log-standup = !git log --since yesterday --author $(git config user.email) --pretty=short
+
+        ## ls-files ##
+
+        # ls-files - show information about files in the index and the working tree; like Unix "ls" command.
+        ls = ls-files
+
+        # ls-ignored -  list files that git has ignored.
+        ls-ignored = ls-files --others --i --exclude-standard
+
+        ### merge ###
+
+        # merge but without autocommit, and with a commit even if the merge resolved as a fast-forward.
+        me = merge --no-commit --no-ff
+
+        ### pull ###
+        
+        # pull and do some basic housekeeping, and make sure that any branches that were deleted on the remote are also deleted locally.
+        pp = pull --prune
+
+        # pull if a merge can be resolved as a fast-forward, otherwise fail.
+        pf = pull --ff-only
+
+        # pull with rebase - to provide a cleaner, linear, bisectable history.
+        pr = pull --rebase
+
+        ### push ###
+
+        # Force push 
+        ggpush = push -f
+
+        ### rebase ###
+
+        # rebase - forward-port local commits to the updated upstream head.
+        rb = rebase
+        
+        # rbi - rebase interactive on our unpushed commits.
+        rbi = rebase --interactive @{upstream}
+
+        # Interactively rebase all the commits on the current branch
+        rebase-branch = !"git rebase --interactive `git merge-base master HEAD`"
+
+        # See https://blog.filippo.io/git-fixup-amending-an-older-commit/
+        # This is a slightly modified version
+        # Can be used like: git fixup <COMMIT-SHA>
+        fixup = "!f() { TARGET=$(git rev-parse \"$1\"); git commit --fixup=$TARGET && GIT_EDITOR=true git rebase --interactive --autosquash $TARGET~; }; f"
+
+        ### reflog ###
+
+        # reflog - reference log that manages when tips of branches are updated.
+        rl = reflog
+
+        ### remote ###
+
+        # Push to all remotes
+        push-to-all-remotes = !git remote | xargs -I% -n1 git push %
+
+        ### status ###
+
+        # status with short format instead of full details
+        ss = status --short
+
+        # status with short format and showing branch and tracking info.
+        ssb = status --short --branch
+
+        ##
+        # Reset & Undo
+        ##
+
+        # Reset and undo aliases are ways to move backwards on the commit chain.
+        # We find that novices prefer the wording "undo"; experts prefer "reset".
+        reset-commit       = reset --soft HEAD~1
+        reset-commit-hard  = reset --hard HEAD~1
+        reset-commit-clean = !git reset --hard HEAD~1 && git clean -fd
+        reset-to-pristine   = !git reset --hard && git clean -ffdx
+        reset-to-upstream  = !git reset --hard $(git upstream-name)
+        unstage = reset HEAD --
+        wip = "!git add --all; git cm 'WIP'"
+        unwip = "!git reset --soft HEAD~1; git unstage"
+
+        ### ALIAS MANAGEMENT ###
+
+        # Show our defined alias list
+        aliases = "!git config --get-regexp '^alias\\.' | cut -c 7- | sed 's/ / = /'"
+
+        add-alias = "!f() { [ $# = 3 ] && git config $1 alias.\"$2\" \"$3\" && return 0 || echo \"Usage: git add-(local|global)-alias <new alias> <original command>\" >&2 && return 1; }; f"
+        add-global-alias = "!git add-alias --global"
+        add-local-alias = "!git add-alias --local"
+
+        # Rename an alias
+        rename-alias = "!f() { [ $# = 3 ] && [ $2 != $3 ] && [ ! -z \"$(git config $1 --get alias.$2)\" ] && [ -z \"$(git config $1 --get alias.$3)\" ] && git config $1 alias.$3 \"$(git config $1 --get alias.$2)\" && git config $1 --unset alias.$2 && return 0 || echo \"Usage: git rename-(local|global)-alias <alias existing name> <new alias name>\nThe alias you are going to rename must exist and new name must not exist.\" >&2 && return 1; };f"
+        rename-global-alias = "!git rename-alias --global"
+        rename-local-alias = "!git rename-alias --local"
+      
+        ##
+        # Custom scripts.
+        ##
+
+        promote = !$ZSH/bin/git-promote
+        wtf     = !$ZSH/bin/git-wtf
+        rank-contributors = !$ZSH/bin/git-rank-contributors
+        count   = !git shortlog -sn
+	alias = config --get-regexp ^alias\\.
+
+[color]
+        diff = auto
+        status = auto
+        branch = auto
+        ui = true
+[core]
+        excludesfile = ~/.gitignore
+        editor = vim
+[apply]
+        whitespace = nowarn
+[mergetool]
+        keepBackup = false
+[difftool]
+        prompt = false
+[help]
+        autocorrect = 1
+[push]
+        # See `git help config` (search for push.default)
+        # for more information on different options of the below setting.
+        #
+        # Setting to git 2.0 default to suppress warning message
+        default = simple
+[http]
+	cookiefile = /Users/caynan/.gitcookies
+[url "git@github.com:"]
+	insteadOf = https://github.com/
